@@ -31,7 +31,9 @@ class Cache {
 
   async cacheContent(key, headers, payload) {
     // Set cache length to 1 day.
-    const cacheDurationMinutes = 60*24;
+    //const cacheDurationMinutes = 60*24;
+    // Set cache length to 7 days.
+    const cacheDurationMinutes = 60*24*7;
     const now = new Date();
     const entity = {
       key: key,
