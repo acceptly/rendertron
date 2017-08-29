@@ -40,10 +40,11 @@ if (fs.existsSync(configPath)) {
 
 // Only start a cache if configured and not in testing.
 if (!module.parent && !!config['cache']) {
-  app.get('/render/:url(*)', cache.middleware());
-  app.get('/screenshot/:url(*)', cache.middleware());
+  app.get('/:url(*)', cache.middleware());
+  //app.get('/render/:url(*)', cache.middleware());
+  //app.get('/screenshot/:url(*)', cache.middleware());
   // Always clear the cache for now, while things are changing.
-  cache.clearCache();
+  //cache.clearCache();
 }
 
 // Allows the config to be overriden
@@ -58,9 +59,11 @@ app.use(compression());
 
 app.use('/node_modules', express.static(path.resolve(__dirname, '../node_modules')));
 
+/*
 app.get('/', (request, response) => {
   response.sendFile(path.resolve(__dirname, 'index.html'));
 });
+*/
 
 function isRestricted(url) {
   if (!config['renderOnly'])
@@ -88,7 +91,7 @@ function track(action, time) {
   }
 }
 
-app.get('/render/:url(*)', async(request, response) => {
+app.get('/:url(*)', async(request, response) => {
   if (isRestricted(request.params.url)) {
     response.status(403).send('Render request forbidden, domain excluded');
     return;
@@ -107,6 +110,7 @@ app.get('/render/:url(*)', async(request, response) => {
   }
 });
 
+/*
 app.get('/screenshot/:url(*)', async(request, response) => {
   if (isRestricted(request.params.url)) {
     response.status(403).send('Render request forbidden, domain excluded');
@@ -130,13 +134,16 @@ app.get('/screenshot/:url(*)', async(request, response) => {
     response.status(400).send(message);
   }
 });
+*/
 
 app.get('/_ah/health', (request, response) => response.send('OK'));
 
+/*
 app.get('/_ah/stop', async(request, response) => {
   await config.chrome.kill();
   response.send('OK');
 });
+*/
 
 const appPromise = chromeLauncher.launch({
   chromeFlags: ['--headless', '--disable-gpu', '--remote-debugging-address=0.0.0.0'],
