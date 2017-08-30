@@ -108,7 +108,8 @@ class Renderer {
       // Set a virtual time budget of 10 seconds. This 10 second timer is paused while there are
       // any active network requests. This allows for a maximum of 10 seconds in script/rendering
       // time. Once the page is idle, the virtual time budget expires immediately.
-      let currentTimeBudget = 10000;
+      //let currentTimeBudget = 10000;
+      let currentTimeBudget = 600000;
       Emulation.setVirtualTimePolicy({policy: 'pauseIfNetworkFetchesPending', budget: currentTimeBudget});
 
       let budgetExpired = async() => {
@@ -137,7 +138,7 @@ class Renderer {
 
       // Set a hard limit of 10 seconds.
       let timeoutId = setTimeout(() => {
-        console.log(`10 second time budget limit reached.
+        console.log(`${ currentTimeBudget / 1000} seconds time budget limit reached.
           Attempted rendering: ${url}
           Page load event fired: ${pageLoadEventFired}
           Outstanding network requests: ${outstandingRequests.size}`);
@@ -188,8 +189,6 @@ class Renderer {
 
         let result = await Runtime.evaluate({expression: 'document.firstElementChild.outerHTML'});
         CDP.Close({id: client.target.id, port: config.port});
-        console.log("STATUS", renderResult.status);
-        console.log("BODY", result.result.value);
         resolve({
           status: renderResult.status,
           body: result.result.value});

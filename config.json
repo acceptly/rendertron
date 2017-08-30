@@ -1,4 +1,9 @@
 {
   "cache": true,
-  "renderOnly": ["https://www.twenty20.com", "http://www.twenty20.com", "http://staging-nathan.twenty20.com"]
+  "renderOnly": [
+    "https://www.twenty20.com",
+    "http://www.twenty20.com",
+    "http://staging-nathan.twenty20.com",
+    "http://www.localhost.twenty20.com"
+  ]
 }
