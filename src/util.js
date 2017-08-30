@@ -35,7 +35,6 @@ util.getUrl = function (req) {
 
     // Remove the _escaped_fragment_ query parameter
     if (parts.query && parts.query['_escaped_fragment_'] !== undefined) {
-        
         if (parts.query['_escaped_fragment_'] && !Array.isArray(parts.query['_escaped_fragment_'])) {
             parts.hash = '#!' + parts.query['_escaped_fragment_'];
         }
@@ -66,11 +65,3 @@ util.encodeHash = function(url) {
 
     return url;
 }
-
-util.log = function() {
-  if (process.env.DISABLE_LOGGING) {
-    return;
-  }
-
-  console.log.apply(console.log, [new Date().toISOString()].concat(Array.prototype.slice.call(arguments, 0)));
-};

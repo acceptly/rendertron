@@ -16,7 +16,7 @@
 
 'use strict';
 
-const CDP   = require('chrome-remote-interface');
+const CDP = require('chrome-remote-interface');
 
 class Renderer {
   _loadPage(client, url, options, config) {
