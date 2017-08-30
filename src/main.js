@@ -28,6 +28,8 @@ const app = express();
 const cache = require('./cache');
 const now = require('performance-now');
 const uuidv4 = require('uuid/v4');
+const util = require('./util');
+const url_lib = require('url');
 
 // Load config from config.json if it exists.
 let config = {};
@@ -65,6 +67,9 @@ app.get('/', (request, response) => {
 });
 */
 
+
+
+/*
 function isRestricted(url) {
   if (!config['renderOnly'])
     return false;
@@ -73,6 +78,25 @@ function isRestricted(url) {
       return false;
     }
   }
+  return true;
+}
+*/
+
+function isRestricted(requested_url) {
+  let allowedDomains = config['allowedDomains'] || [];
+
+  if (config['allowedDomains'].length == 0)
+    return true;
+
+  let parsed = url_lib.parse(requested_url);
+  if (!parsed.hostname)
+    return true;
+
+  for (let i = 0; i < allowedDomains.length; i++) {
+    if (parsed.hostname.endsWith(allowedDomains[i]))
+      return false;
+  }
+
   return true;
 }
 
@@ -92,6 +116,9 @@ function track(action, time) {
 }
 
 app.get('/:url(*)', async(request, response) => {
+  request.params.url = util.normalizeUrl(request.params.url)
+  request.params.url = util.getUrl(request)
+
   if (isRestricted(request.params.url)) {
     response.status(403).send('Render request forbidden, domain excluded');
     return;
