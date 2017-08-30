@@ -28,6 +28,7 @@ const app = express();
 const cache = require('./cache');
 const now = require('performance-now');
 const uuidv4 = require('uuid/v4');
+const util = require('./util');
 
 // Load config from config.json if it exists.
 let config = {};
@@ -40,7 +41,7 @@ if (fs.existsSync(configPath)) {
 
 // Only start a cache if configured and not in testing.
 if (!module.parent && !!config['cache']) {
-  app.get('/:url(*)', cache.middleware());
+  //app.get('/:url(*)', cache.middleware());
   //app.get('/render/:url(*)', cache.middleware());
   //app.get('/screenshot/:url(*)', cache.middleware());
   // Always clear the cache for now, while things are changing.
@@ -92,6 +93,12 @@ function track(action, time) {
 }
 
 app.get('/:url(*)', async(request, response) => {
+  console.log("1", request.params.url);
+  request.params.url = util.normalizeUrl(request.params.url)
+  console.log("2", request.params.url);
+  request.params.url = util.getUrl(request)
+  console.log("3", request.params.url);
+
   if (isRestricted(request.params.url)) {
     response.status(403).send('Render request forbidden, domain excluded');
     return;

@@ -16,7 +16,7 @@
 
 'use strict';
 
-const CDP = require('chrome-remote-interface');
+const CDP   = require('chrome-remote-interface');
 
 class Renderer {
   _loadPage(client, url, options, config) {
@@ -188,6 +188,8 @@ class Renderer {
 
         let result = await Runtime.evaluate({expression: 'document.firstElementChild.outerHTML'});
         CDP.Close({id: client.target.id, port: config.port});
+        console.log("STATUS", renderResult.status);
+        console.log("BODY", result.result.value);
         resolve({
           status: renderResult.status,
           body: result.result.value});
